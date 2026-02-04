@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CalcIFC2 - Analyse rapide IFC</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <div>
+          <p class="eyebrow">Pré-analyse Eurocode</p>
+          <h1>CalcIFC2</h1>
+          <p class="subtitle">
+            Importez un modèle IFC Tekla, sélectionnez la zone normative et obtenez un
+            pré-rapport d'analyse avant le dimensionnement complet.
+          </p>
+        </div>
+        <div class="badge">
+          <span>Version Alpha</span>
+          <small>Interface web moderne</small>
+        </div>
+      </header>
+
+      <section class="card">
+        <form id="ifc-form">
+          <div class="grid">
+            <div class="field">
+              <label for="project">Nom du projet</label>
+              <input id="project" name="project" type="text" placeholder="Hangar logistique" required />
+            </div>
+            <div class="field">
+              <label for="building_use">Usage du bâtiment</label>
+              <select id="building_use" name="building_use">
+                <option value="Industriel">Industriel</option>
+                <option value="Stockage">Stockage</option>
+                <option value="Bureau">Bureau</option>
+                <option value="Commercial">Commercial</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="zone">Zone normative</label>
+              <select id="zone" name="zone" required>
+                <option value="">Sélectionner la zone</option>
+                {% for zone in zones %}
+                  <option value="{{ zone }}">{{ zone }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field">
+              <label for="ifc_file">Fichier IFC</label>
+              <input id="ifc_file" name="ifc_file" type="file" accept=".ifc" required />
+              <p class="hint">Le logiciel recalculera automatiquement dès qu'un nouveau fichier est déposé.</p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit">Lancer la pré-analyse</button>
+            <button type="button" id="reset">Réinitialiser</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" id="results" aria-live="polite">
+        <h2>Résultats</h2>
+        <div class="empty">Déposez un fichier IFC pour afficher les résultats.</div>
+      </section>
+
+      <section class="card" id="history">
+        <div class="history-header">
+          <h2>Historique des analyses</h2>
+          <button type="button" id="refresh-history">Actualiser</button>
+        </div>
+        <div class="history-list empty">Aucune analyse enregistrée.</div>
+      </section>
+
+      <section class="card">
+        <h2>Suivi & recalcul automatique</h2>
+        <p>
+          Le système détecte les changements de profils et déclenche un recalcul rapide pour aider
+          le dessinateur à ajuster les sections avant l'assemblage.
+        </p>
+        <ul class="list">
+          <li>Historique des versions IFC importées.</li>
+          <li>Alertes en cas de non conformité aux Eurocodes.</li>
+          <li>Export du pré-rapport pour validation interne.</li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
